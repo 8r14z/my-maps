@@ -88,9 +88,8 @@ extension MainMapsViewController: CLLocationManagerDelegate {
         case .authorizedAlways: fallthrough
         case .authorizedWhenInUse:
             print("[Location Authorization] Location status is authorized.")
+            self._locationManager.startUpdatingLocation()
         }
-        
-        self._locationManager.startUpdatingLocation()
     }
     
     // Handle location manager errors.
