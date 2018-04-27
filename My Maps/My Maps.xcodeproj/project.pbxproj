@@ -7,14 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		366BA97BAE49F0C989B0BF03 /* Pods_My_Maps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5201D229776B2AB5470C03C8 /* Pods_My_Maps.framework */; };
+		D83170B0209337190064D21D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170AF209337190064D21D /* Constants.swift */; };
+		D83170B220933D0C0064D21D /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170B120933D0C0064D21D /* Helper.swift */; };
 		D8B073A02093066E0087F34A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B0739F2093066E0087F34A /* AppDelegate.swift */; };
 		D8B073A52093066E0087F34A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8B073A32093066E0087F34A /* Main.storyboard */; };
 		D8B073A72093066E0087F34A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8B073A62093066E0087F34A /* Assets.xcassets */; };
 		D8B073AA2093066E0087F34A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8B073A82093066E0087F34A /* LaunchScreen.storyboard */; };
 		D8B073B2209306AD0087F34A /* MainMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B073B1209306AD0087F34A /* MainMapsViewController.swift */; };
+		D8B073BA20930F080087F34A /* AppComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B073B920930F080087F34A /* AppComponents.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1108DF96CFF6A3FC8C4C1218 /* Pods-My Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-My Maps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-My Maps/Pods-My Maps.debug.xcconfig"; sourceTree = "<group>"; };
+		1B947D7480341511FC3FC2FD /* Pods-My Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-My Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-My Maps/Pods-My Maps.release.xcconfig"; sourceTree = "<group>"; };
+		5201D229776B2AB5470C03C8 /* Pods_My_Maps.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_My_Maps.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D83170AF209337190064D21D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		D83170B120933D0C0064D21D /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D8B0739C2093066E0087F34A /* My Maps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Maps.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8B0739F2093066E0087F34A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8B073A42093066E0087F34A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -22,6 +31,7 @@
 		D8B073A92093066E0087F34A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8B073AB2093066E0087F34A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8B073B1209306AD0087F34A /* MainMapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapsViewController.swift; sourceTree = "<group>"; };
+		D8B073B920930F080087F34A /* AppComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponents.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +39,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				366BA97BAE49F0C989B0BF03 /* Pods_My_Maps.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		39AB4A04211CBC2287DE1EEF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1108DF96CFF6A3FC8C4C1218 /* Pods-My Maps.debug.xcconfig */,
+				1B947D7480341511FC3FC2FD /* Pods-My Maps.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		6B3EA79D179A1936543A5AF2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5201D229776B2AB5470C03C8 /* Pods_My_Maps.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D8B073932093066E0087F34A = {
 			isa = PBXGroup;
 			children = (
 				D8B0739E2093066E0087F34A /* My Maps */,
 				D8B0739D2093066E0087F34A /* Products */,
+				39AB4A04211CBC2287DE1EEF /* Pods */,
+				6B3EA79D179A1936543A5AF2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +84,33 @@
 		D8B0739E2093066E0087F34A /* My Maps */ = {
 			isa = PBXGroup;
 			children = (
+				D8B073BB20931D060087F34A /* Modules */,
+				D8B073B820930EF60087F34A /* Components */,
 				D8B0739F2093066E0087F34A /* AppDelegate.swift */,
 				D8B073A32093066E0087F34A /* Main.storyboard */,
 				D8B073A62093066E0087F34A /* Assets.xcassets */,
 				D8B073A82093066E0087F34A /* LaunchScreen.storyboard */,
 				D8B073AB2093066E0087F34A /* Info.plist */,
-				D8B073B1209306AD0087F34A /* MainMapsViewController.swift */,
 			);
 			path = "My Maps";
+			sourceTree = "<group>";
+		};
+		D8B073B820930EF60087F34A /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D8B073B920930F080087F34A /* AppComponents.swift */,
+				D83170AF209337190064D21D /* Constants.swift */,
+				D83170B120933D0C0064D21D /* Helper.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		D8B073BB20931D060087F34A /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				D8B073B1209306AD0087F34A /* MainMapsViewController.swift */,
+			);
+			path = Modules;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +120,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8B073AE2093066E0087F34A /* Build configuration list for PBXNativeTarget "My Maps" */;
 			buildPhases = (
+				EB7515881185561AF8760B3D /* [CP] Check Pods Manifest.lock */,
 				D8B073982093066E0087F34A /* Sources */,
 				D8B073992093066E0087F34A /* Frameworks */,
 				D8B0739A2093066E0087F34A /* Resources */,
+				94299FC3D07644649B2E4BF8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -91,7 +142,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Le Vu Hoai An";
 				TargetAttributes = {
 					D8B0739B2093066E0087F34A = {
@@ -131,6 +182,47 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		94299FC3D07644649B2E4BF8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-My Maps/Pods-My Maps-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-My Maps/Pods-My Maps-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB7515881185561AF8760B3D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-My Maps-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D8B073982093066E0087F34A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -138,6 +230,9 @@
 			files = (
 				D8B073A02093066E0087F34A /* AppDelegate.swift in Sources */,
 				D8B073B2209306AD0087F34A /* MainMapsViewController.swift in Sources */,
+				D83170B220933D0C0064D21D /* Helper.swift in Sources */,
+				D8B073BA20930F080087F34A /* AppComponents.swift in Sources */,
+				D83170B0209337190064D21D /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +272,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -184,6 +280,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -234,6 +331,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -241,6 +339,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -272,11 +371,13 @@
 		};
 		D8B073AF2093066E0087F34A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1108DF96CFF6A3FC8C4C1218 /* Pods-My Maps.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2QHF7H3E43;
 				INFOPLIST_FILE = "My Maps/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lvhan.my-maps";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -287,11 +388,13 @@
 		};
 		D8B073B02093066E0087F34A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B947D7480341511FC3FC2FD /* Pods-My Maps.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2QHF7H3E43;
 				INFOPLIST_FILE = "My Maps/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lvhan.my-maps";
 				PRODUCT_NAME = "$(TARGET_NAME)";
