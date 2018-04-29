@@ -8,4 +8,5 @@ target 'My Maps' do
   # Pods for My Maps
   pod 'GoogleMaps'
   pod 'GooglePlaces'
+  pod 'GooglePlacePicker'
 end

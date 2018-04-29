@@ -10,11 +10,16 @@
 		366BA97BAE49F0C989B0BF03 /* Pods_My_Maps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5201D229776B2AB5470C03C8 /* Pods_My_Maps.framework */; };
 		D83170B0209337190064D21D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170AF209337190064D21D /* Constants.swift */; };
 		D83170B220933D0C0064D21D /* UtilityHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170B120933D0C0064D21D /* UtilityHelper.swift */; };
+		D83170B62093A57F0064D21D /* BaseMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170B52093A57F0064D21D /* BaseMapViewController.swift */; };
+		D83170B92093AE680064D21D /* PlaceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170B82093AE680064D21D /* PlaceDetailView.swift */; };
+		D83170BE2095ACE90064D21D /* TwoPlacesPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170BD2095ACE90064D21D /* TwoPlacesPickerView.swift */; };
+		D83170C02095B9970064D21D /* MapViewController_TwoPlacePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170BF2095B9970064D21D /* MapViewController_TwoPlacePicker.swift */; };
+		D83170C3209649740064D21D /* MapViewController_GMSAutoComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170C2209649740064D21D /* MapViewController_GMSAutoComplete.swift */; };
 		D8B073A02093066E0087F34A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B0739F2093066E0087F34A /* AppDelegate.swift */; };
 		D8B073A52093066E0087F34A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8B073A32093066E0087F34A /* Main.storyboard */; };
 		D8B073A72093066E0087F34A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8B073A62093066E0087F34A /* Assets.xcassets */; };
 		D8B073AA2093066E0087F34A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8B073A82093066E0087F34A /* LaunchScreen.storyboard */; };
-		D8B073B2209306AD0087F34A /* MainMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B073B1209306AD0087F34A /* MainMapsViewController.swift */; };
+		D8B073B2209306AD0087F34A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B073B1209306AD0087F34A /* MapViewController.swift */; };
 		D8B073BA20930F080087F34A /* AppComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B073B920930F080087F34A /* AppComponents.swift */; };
 /* End PBXBuildFile section */
 
@@ -24,13 +29,18 @@
 		5201D229776B2AB5470C03C8 /* Pods_My_Maps.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_My_Maps.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D83170AF209337190064D21D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D83170B120933D0C0064D21D /* UtilityHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityHelper.swift; sourceTree = "<group>"; };
+		D83170B52093A57F0064D21D /* BaseMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMapViewController.swift; sourceTree = "<group>"; };
+		D83170B82093AE680064D21D /* PlaceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailView.swift; sourceTree = "<group>"; };
+		D83170BD2095ACE90064D21D /* TwoPlacesPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoPlacesPickerView.swift; sourceTree = "<group>"; };
+		D83170BF2095B9970064D21D /* MapViewController_TwoPlacePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController_TwoPlacePicker.swift; sourceTree = "<group>"; };
+		D83170C2209649740064D21D /* MapViewController_GMSAutoComplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController_GMSAutoComplete.swift; sourceTree = "<group>"; };
 		D8B0739C2093066E0087F34A /* My Maps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Maps.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8B0739F2093066E0087F34A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8B073A42093066E0087F34A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D8B073A62093066E0087F34A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8B073A92093066E0087F34A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8B073AB2093066E0087F34A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D8B073B1209306AD0087F34A /* MainMapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapsViewController.swift; sourceTree = "<group>"; };
+		D8B073B1209306AD0087F34A /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		D8B073B920930F080087F34A /* AppComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponents.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -73,13 +83,21 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		D83170B42093437A0064D21D /* Config */ = {
+		D83170B72093AD510064D21D /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
-				D8B0739F2093066E0087F34A /* AppDelegate.swift */,
-				D8B073AB2093066E0087F34A /* Info.plist */,
+				D83170B82093AE680064D21D /* PlaceDetailView.swift */,
+				D83170BD2095ACE90064D21D /* TwoPlacesPickerView.swift */,
 			);
-			path = Config;
+			path = "Custom Views";
+			sourceTree = "<group>";
+		};
+		D83170BC20940DF10064D21D /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				D83170B52093A57F0064D21D /* BaseMapViewController.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		D8B073932093066E0087F34A = {
@@ -103,9 +121,10 @@
 		D8B0739E2093066E0087F34A /* My Maps */ = {
 			isa = PBXGroup;
 			children = (
+				D8B073AB2093066E0087F34A /* Info.plist */,
+				D8B0739F2093066E0087F34A /* AppDelegate.swift */,
 				D8B073BB20931D060087F34A /* Modules */,
 				D8B073B820930EF60087F34A /* Components */,
-				D83170B42093437A0064D21D /* Config */,
 				D83170B32093436A0064D21D /* Resources */,
 			);
 			path = "My Maps";
@@ -124,7 +143,11 @@
 		D8B073BB20931D060087F34A /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				D8B073B1209306AD0087F34A /* MainMapsViewController.swift */,
+				D83170B72093AD510064D21D /* Custom Views */,
+				D83170BC20940DF10064D21D /* Base */,
+				D8B073B1209306AD0087F34A /* MapViewController.swift */,
+				D83170BF2095B9970064D21D /* MapViewController_TwoPlacePicker.swift */,
+				D83170C2209649740064D21D /* MapViewController_GMSAutoComplete.swift */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -207,11 +230,13 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-My Maps/Pods-My Maps-resources.sh",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlacePicker/Frameworks/GooglePlacePicker.framework/Resources/GooglePlacePicker.bundle",
 				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlacePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -245,8 +270,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8B073A02093066E0087F34A /* AppDelegate.swift in Sources */,
-				D8B073B2209306AD0087F34A /* MainMapsViewController.swift in Sources */,
+				D8B073B2209306AD0087F34A /* MapViewController.swift in Sources */,
 				D83170B220933D0C0064D21D /* UtilityHelper.swift in Sources */,
+				D83170B62093A57F0064D21D /* BaseMapViewController.swift in Sources */,
+				D83170C02095B9970064D21D /* MapViewController_TwoPlacePicker.swift in Sources */,
+				D83170C3209649740064D21D /* MapViewController_GMSAutoComplete.swift in Sources */,
+				D83170BE2095ACE90064D21D /* TwoPlacesPickerView.swift in Sources */,
+				D83170B92093AE680064D21D /* PlaceDetailView.swift in Sources */,
 				D8B073BA20930F080087F34A /* AppComponents.swift in Sources */,
 				D83170B0209337190064D21D /* Constants.swift in Sources */,
 			);

@@ -25,4 +25,12 @@ struct UtilityHelper {
         alert.addAction(settingsAction)
         vc.present(alert, animated: true, completion: nil)
     }
+    
+    static func blurView(_ rect: CGRect, style: UIBlurEffectStyle = .extraLight) -> UIVisualEffectView {
+        let blurEffect = UIBlurEffect(style: style)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        blurView.frame = rect
+        return blurView
+    }
 }
