@@ -13,13 +13,15 @@ import GooglePlacePicker
 
 class MapViewController: BaseMapViewController {
     
+    // MARK: Properties
     fileprivate var _locationManager = CLLocationManager()
     fileprivate var _currentLocation: CLLocation?
     fileprivate let DEFAULT_ZOOM_LEVEL: Float = 15.0
     
     fileprivate var _mapView: GMSMapView!
     fileprivate var _placeDetailView: PlaceDetailView!
-    fileprivate var _placePickerView: TwoPlacesPickerView!
+    fileprivate var _twoPlacesPickerView: TwoPlacesPickerView!
+    fileprivate var _onePlacePickerView: OnePlacePickerView!
     
     internal var _autocompleteController: GMSAutocompleteViewController = {
         let autocompleteController = GMSAutocompleteViewController()
@@ -28,6 +30,7 @@ class MapViewController: BaseMapViewController {
         return autocompleteController
     }()
     
+    // MARK: Implementation
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,10 +57,65 @@ class MapViewController: BaseMapViewController {
         self.contentMainView.addSubview(self._mapView)
         self.contentMainView.addSubview(self._placeDetailView)
         
-        self._placePickerView = TwoPlacesPickerView(frame: self.headerDirectionView.bounds)
-        self._placePickerView.delegate = self
+        self._twoPlacesPickerView = TwoPlacesPickerView(frame: self.headerDirectionView.bounds)
+        self._twoPlacesPickerView.delegate = self
+        
+        self._onePlacePickerView = OnePlacePickerView(frame: self.headerDirectionView.bounds)
+        self._onePlacePickerView.backgroundColor = UIColor.white
+        self._onePlacePickerView.delegate = self
+        
+        self.headerDirectionView.addSubview(self._twoPlacesPickerView)
+        self.headerDirectionView.addSubview(self._onePlacePickerView)
+
         self.headerDirectionView.backgroundColor = UIColor.clear
-        self.headerDirectionView.addSubview(self._placePickerView)
+    }
+    
+    override func setupComponents() {
+        super.setupComponents()
+        
+        self._locationManager = CLLocationManager()
+        self._locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self._locationManager.requestAlwaysAuthorization()
+        self._locationManager.distanceFilter = 50
+        self._locationManager.startUpdatingLocation()
+        self._locationManager.delegate = self
+        
+        self._autocompleteController.delegate = self
+    }
+    
+    // MARK: Animate show/hide UI elements
+    internal func hideTwoPlacesPickerView(_ hide: Bool, animated: Bool) {
+        var originX: CGFloat = 0
+        let moveDistance = self.headerDirectionView.bounds.width
+        
+        if hide {
+            originX = self._twoPlacesPickerView.frame.origin.x
+            if animated {
+                self._onePlacePickerView.frame.origin.x -= moveDistance
+                UIView.animate(withDuration: 0.3) { [weak self] in
+                    self?._onePlacePickerView.frame.origin.x = originX
+                    self?._twoPlacesPickerView.frame.origin.x += moveDistance
+                }
+            }
+            else {
+                self._onePlacePickerView.frame.origin.x -= originX
+                self._twoPlacesPickerView.frame.origin.x += moveDistance
+            }
+        }
+        else {
+            originX = self._onePlacePickerView.frame.origin.x
+            if animated {
+                self._twoPlacesPickerView.frame.origin.x += moveDistance
+                UIView.animate(withDuration: 0.3) { [weak self] in
+                    self?._onePlacePickerView.frame.origin.x -= moveDistance
+                    self?._twoPlacesPickerView.frame.origin.x = originX
+                }
+            }
+            else {
+                self._onePlacePickerView.frame.origin.x -= moveDistance
+                self._twoPlacesPickerView.frame.origin.x = originX
+            }
+        }
     }
     
     private func hidePlaceDetail(_ hide: Bool, animated: Bool) {
@@ -80,24 +138,7 @@ class MapViewController: BaseMapViewController {
             }
         }
     }
-    
-    override func setupComponents() {
-        super.setupComponents()
-        
-        self._locationManager = CLLocationManager()
-        self._locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        self._locationManager.requestAlwaysAuthorization()
-        self._locationManager.distanceFilter = 50
-        self._locationManager.startUpdatingLocation()
-        self._locationManager.delegate = self
-        
-        self._autocompleteController.delegate = self
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+
 }
 
 // MARK: CoreLocationManager Delegate

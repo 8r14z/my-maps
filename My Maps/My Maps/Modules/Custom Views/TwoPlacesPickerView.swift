@@ -50,16 +50,12 @@ class TwoPlacesPickerView: UIView {
                                               width: placeChooserWidth,
                                               height: placeChooserHeight)
         self.firstPlaceChooser.backgroundColor = UIColor.white
+        
         self.secondPlaceChooser.frame = CGRect(x: placeChooserXPosition,
                                                y: firstPlaceChooser.bounds.height + placeChooserVericalPadding*2,
                                                width: placeChooserWidth,
                                                height: placeChooserHeight)
         self.secondPlaceChooser.backgroundColor = UIColor.white
-        
-//        let blurView1 = UtilityHelper.blurView(self.firstPlaceChooser.bounds)
-//        let blurView2 = UtilityHelper.blurView(self.firstPlaceChooser.bounds)
-//        self.firstPlaceChooser.insertSubview(blurView1, at: 0)
-//        self.secondPlaceChooser.insertSubview(blurView2, at: 0)
 
         addSubview(self._backButton)
         addSubview(self.firstPlaceChooser)

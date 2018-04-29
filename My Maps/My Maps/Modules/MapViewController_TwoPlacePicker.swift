@@ -19,6 +19,6 @@ extension MapViewController: TwoPlacesPickerViewDelegate {
     }
     
     func didTapBackButton() {
-        
+        hideTwoPlacesPickerView(true, animated: true)
     }
 }

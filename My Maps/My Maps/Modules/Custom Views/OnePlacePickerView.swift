@@ -8,11 +8,23 @@
 
 import UIKit
 
+protocol OnePlacePickerViewDelegate: AnyObject {
+    func didTapChangePickerView()
+}
+
 class OnePlacePickerView: UIView {
+    
+    weak var delegate: OnePlacePickerViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didNavigate))
+        self.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func didNavigate() {
+        delegate?.didTapChangePickerView()
     }
     
     required init?(coder aDecoder: NSCoder) {

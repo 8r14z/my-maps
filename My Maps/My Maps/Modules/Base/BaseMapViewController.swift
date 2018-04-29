@@ -32,7 +32,7 @@ class BaseMapViewController: UIViewController {
         self.headerDirectionView.frame = CGRect(x: DEFAULT_PADDING, y: DEFAULT_PADDING, width: self.view.bounds.width - (DEFAULT_PADDING * 2) , height: self.view.bounds.height/5 - DEFAULT_PADDING)
         
         self.headerDirectionView.backgroundColor = UIColor.white
-        self.headerDirectionView.layer.cornerRadius = 10
+        self.headerDirectionView.layer.cornerRadius = DEFAULT_CORNER_RADIUS_VALUE
         self.headerDirectionView.clipsToBounds = true
         
         self.view.addSubview(contentMainView)
@@ -57,16 +57,5 @@ class BaseMapViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

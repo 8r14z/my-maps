@@ -18,3 +18,4 @@ let kUserDefaultCurrentLocationLongitude = "kUserDefaultCurrentLocationLongitude
 let DEFAULT_PADDING: CGFloat = 10.0
 let DEFAULT_PLACE_DETAIL_VIEW_HEIGHT = UIScreen.main.bounds.height/8
 let DEFAULT_PLACE_PICKER_VIEW_BACKGROUND_COLOR = UIColor(red: 66/255, green: 133/255, blue: 244/255, alpha: 0.8)
+let DEFAULT_CORNER_RADIUS_VALUE: CGFloat = 10
