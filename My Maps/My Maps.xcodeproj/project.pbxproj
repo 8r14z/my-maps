@@ -13,9 +13,7 @@
 		D83170B62093A57F0064D21D /* BaseMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170B52093A57F0064D21D /* BaseMapViewController.swift */; };
 		D83170B92093AE680064D21D /* PlaceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170B82093AE680064D21D /* PlaceDetailView.swift */; };
 		D83170BE2095ACE90064D21D /* TwoPlacesPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170BD2095ACE90064D21D /* TwoPlacesPickerView.swift */; };
-		D83170C02095B9970064D21D /* MapViewController_TwoPlacePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170BF2095B9970064D21D /* MapViewController_TwoPlacePicker.swift */; };
 		D83170C720964B820064D21D /* OnePlacePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170C620964B820064D21D /* OnePlacePickerView.swift */; };
-		D83170C9209655210064D21D /* MapViewController_OnePlacePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83170C8209655210064D21D /* MapViewController_OnePlacePicker.swift */; };
 		D8B073A02093066E0087F34A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B0739F2093066E0087F34A /* AppDelegate.swift */; };
 		D8B073A52093066E0087F34A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8B073A32093066E0087F34A /* Main.storyboard */; };
 		D8B073A72093066E0087F34A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8B073A62093066E0087F34A /* Assets.xcassets */; };
@@ -33,9 +31,7 @@
 		D83170B52093A57F0064D21D /* BaseMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMapViewController.swift; sourceTree = "<group>"; };
 		D83170B82093AE680064D21D /* PlaceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailView.swift; sourceTree = "<group>"; };
 		D83170BD2095ACE90064D21D /* TwoPlacesPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoPlacesPickerView.swift; sourceTree = "<group>"; };
-		D83170BF2095B9970064D21D /* MapViewController_TwoPlacePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController_TwoPlacePicker.swift; sourceTree = "<group>"; };
 		D83170C620964B820064D21D /* OnePlacePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnePlacePickerView.swift; sourceTree = "<group>"; };
-		D83170C8209655210064D21D /* MapViewController_OnePlacePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController_OnePlacePicker.swift; sourceTree = "<group>"; };
 		D8B0739C2093066E0087F34A /* My Maps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Maps.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8B0739F2093066E0087F34A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8B073A42093066E0087F34A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -149,8 +145,6 @@
 				D83170B72093AD510064D21D /* Custom Views */,
 				D83170BC20940DF10064D21D /* Base */,
 				D8B073B1209306AD0087F34A /* MapViewController.swift */,
-				D83170C8209655210064D21D /* MapViewController_OnePlacePicker.swift */,
-				D83170BF2095B9970064D21D /* MapViewController_TwoPlacePicker.swift */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -274,11 +268,9 @@
 			files = (
 				D8B073A02093066E0087F34A /* AppDelegate.swift in Sources */,
 				D8B073B2209306AD0087F34A /* MapViewController.swift in Sources */,
-				D83170C9209655210064D21D /* MapViewController_OnePlacePicker.swift in Sources */,
 				D83170C720964B820064D21D /* OnePlacePickerView.swift in Sources */,
 				D83170B220933D0C0064D21D /* UtilityHelper.swift in Sources */,
 				D83170B62093A57F0064D21D /* BaseMapViewController.swift in Sources */,
-				D83170C02095B9970064D21D /* MapViewController_TwoPlacePicker.swift in Sources */,
 				D83170BE2095ACE90064D21D /* TwoPlacesPickerView.swift in Sources */,
 				D83170B92093AE680064D21D /* PlaceDetailView.swift in Sources */,
 				D8B073BA20930F080087F34A /* AppComponents.swift in Sources */,

@@ -22,15 +22,11 @@ class MapViewController: BaseMapViewController {
     fileprivate var _twoPlacesPickerView: TwoPlacesPickerView!
     fileprivate var _onePlacePickerView: OnePlacePickerView!
     fileprivate var _pickerViewType: PickerViewType = .onePlace
-
-    internal var _autocompleteController: GMSAutocompleteViewController = {
-        let autocompleteController = GMSAutocompleteViewController()
-        autocompleteController.view.backgroundColor = .red
-        autocompleteController.tableCellBackgroundColor = .clear
-        return autocompleteController
-    }()
     
-    fileprivate var isSearching: Bool = false
+    fileprivate var _firstLocation: CLLocationCoordinate2D?
+    fileprivate var _secondLocation: CLLocationCoordinate2D?
+    fileprivate var _isSearching: Bool = false
+    fileprivate var _pickingSecondPlace = false
     
     // MARK: Implementation
     override func viewDidLoad() {
@@ -98,8 +94,6 @@ class MapViewController: BaseMapViewController {
         self._locationManager.distanceFilter = 50
         self._locationManager.startUpdatingLocation()
         self._locationManager.delegate = self
-        
-        self._autocompleteController.delegate = self
     }
     
     // MARK: Animate show/hide UI elements
@@ -126,7 +120,7 @@ class MapViewController: BaseMapViewController {
                 self._twoPlacesPickerView.frame.origin.x += moveDistance
             }
             
-            if isSearching {
+            if self._isSearching {
                 hidePlaceDetail(false, animated: true)
             }
         }
@@ -151,29 +145,49 @@ class MapViewController: BaseMapViewController {
     }
     
     func hidePlaceDetail(_ hide: Bool, animated: Bool) {
+        var newMapRect = self._mapView.frame
+        let moveDistance = DEFAULT_PLACE_DETAIL_VIEW_HEIGHT
         
-        let paddingMapView = {
-            if hide {
-                self._mapView.padding.bottom = 0
-            } else {
-                self._mapView.padding.bottom = DEFAULT_PLACE_DETAIL_VIEW_HEIGHT
+        if hide {
+            newMapRect.size = CGSize(width: newMapRect.size.width, height: self.view.bounds.height)
+            self._mapView.frame = newMapRect
+            if animated {
+                UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                    self?._placeDetailView.frame.origin.y += moveDistance
+                }) { [weak self] (completion) in
+                    self?._placeDetailView.isHidden = hide
+                }
             }
-        }
-        
-        if animated {
-            UIView.transition(with: headerDirectionView, duration: 0.5, options: .transitionCrossDissolve, animations: { [weak self] in
-                self?._placeDetailView.isHidden = hide
-            }) { (completion) in
-                paddingMapView()
+            else {
+                self._placeDetailView.frame.origin.y += moveDistance
             }
         }
         else {
-            self._placeDetailView.isHidden = hide
-            paddingMapView()
+            newMapRect.size = CGSize(width: newMapRect.size.width, height: self.view.bounds.height - DEFAULT_PLACE_DETAIL_VIEW_HEIGHT)
+            if animated {
+                self._placeDetailView.isHidden = hide
+                UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                    guard let `self` = self else { return }
+                    self._placeDetailView.frame.origin.y = self.view.bounds.height - DEFAULT_PLACE_DETAIL_VIEW_HEIGHT
+                }) { [weak self] (completion) in
+                    self?._mapView.frame = newMapRect
+                }
+            }
+            else {
+                self._mapView.frame = newMapRect
+                self._placeDetailView.frame.origin.y = self.view.bounds.height - DEFAULT_PLACE_DETAIL_VIEW_HEIGHT
+            }
         }
-        
     }
 
+    fileprivate func presentAutoCompleteController() {
+        let autocompleteController = GMSAutocompleteViewController()
+        autocompleteController.view.backgroundColor = .red
+        autocompleteController.tableCellBackgroundColor = .clear
+        autocompleteController.delegate = self
+        
+        present(autocompleteController, animated: true, completion: nil)
+    }
 }
 
 // MARK: CoreLocationManager Delegate
@@ -242,13 +256,15 @@ extension MapViewController: GMSAutocompleteViewControllerDelegate {
             marker.title = place.name
             marker.map = self._mapView
             
-            let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude,
-                                                  longitude: place.coordinate.longitude,
-                                                  zoom: DEFAULT_MAP_ZOOM_LEVEL)
+            let camera = GMSCameraPosition.camera(
+                withLatitude: place.coordinate.latitude,
+                longitude: place.coordinate.longitude,
+                zoom: DEFAULT_MAP_ZOOM_LEVEL
+            )
             self._mapView.animate(to: camera)
             
             self.hidePlaceDetail(false, animated: true)
-            
+        
             if let address = place.formattedAddress {
                 self._placeDetailView.setDetailDescription(address)
             }
@@ -258,11 +274,19 @@ extension MapViewController: GMSAutocompleteViewControllerDelegate {
             
             self._onePlacePickerView.setPlacePicker(place.name)
             
-            self.isSearching = true
+            self._secondLocation = place.coordinate
+            
+            self._isSearching = true
         }
         else { // Two places picker handle
-            
-            
+            if !self._pickingSecondPlace {
+                self._firstLocation = place.coordinate
+                self._twoPlacesPickerView.setFirstPlacePicker(place.name)
+            }
+            else {
+                self._secondLocation = place.coordinate
+                self._twoPlacesPickerView.setSecondPlacePicker(place.name)
+            }
         }
         
         dismiss(animated: true, completion: nil)
@@ -285,6 +309,63 @@ extension MapViewController: GMSAutocompleteViewControllerDelegate {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
     
+}
+
+extension MapViewController: OnePlacePickerViewDelegate {
+    func didTapPlacePicker() {
+        presentAutoCompleteController()
+    }
+    
+    func didTapChangePickerView() {
+        hideTwoPlacesPickerView(false, animated: true)
+    }
+    
+}
+
+// MARK: TwoPlacesPickerView Delegate
+extension MapViewController: TwoPlacesPickerViewDelegate {
+    
+    func didTapFirstPlacePicker() {
+        presentAutoCompleteController()
+        self._pickingSecondPlace = false
+    }
+    
+    func didTapSecondPlacePicker() {
+        presentAutoCompleteController()
+        self._pickingSecondPlace = true
+    }
+    
+    func didTapBackButton() {
+        hideTwoPlacesPickerView(true, animated: true)
+        self._twoPlacesPickerView.resetTwoPlacesPickerView()
+    }
+    
+    func didPickPlaces() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+            guard let firstLocation = self._firstLocation, let secondLocation = self._secondLocation else { return }
+            
+            var bounds = GMSCoordinateBounds()
+            let firstMarker = GMSMarker()
+            firstMarker.icon = GMSMarker.markerImage(with: UIColor.lightGray)
+            firstMarker.position = CLLocationCoordinate2D(latitude: firstLocation.latitude, longitude: firstLocation.longitude)
+            firstMarker.map = self._mapView
+            bounds = bounds.includingCoordinate(firstLocation)
+            
+            let secondMaker = GMSMarker()
+            secondMaker.position = CLLocationCoordinate2D(latitude: secondLocation.latitude, longitude: secondLocation.longitude)
+            secondMaker.map = self._mapView
+            bounds = bounds.includingCoordinate(secondLocation)
+            
+            CATransaction.begin()
+            CATransaction.setValue(1, forKey: kCATransactionAnimationDuration)
+            self._mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 100))
+            CATransaction.commit()
+        }
+    }
+    
+    func didResetPickerView() {
+        self._mapView.clear()
+    }
 }
 
 

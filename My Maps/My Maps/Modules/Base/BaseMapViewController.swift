@@ -12,10 +12,6 @@ class BaseMapViewController: UIViewController {
     
     var contentMainView = UIView()
     var headerDirectionView = UIView()
-    
-//    override var prefersStatusBarHidden: Bool {
-//        return true
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +28,6 @@ class BaseMapViewController: UIViewController {
         self.headerDirectionView.frame = CGRect(x: DEFAULT_PADDING, y: DEFAULT_PADDING, width: self.view.bounds.width - (DEFAULT_PADDING * 2) , height: self.view.bounds.height/5 - DEFAULT_PADDING)
         
         self.headerDirectionView.backgroundColor = UIColor.white
-        //self.headerDirectionView.layer.cornerRadius = DEFAULT_CORNER_RADIUS_VALUE
         self.headerDirectionView.clipsToBounds = true
         
         self.view.addSubview(contentMainView)

@@ -12,6 +12,8 @@ protocol TwoPlacesPickerViewDelegate: AnyObject {
     func didTapFirstPlacePicker()
     func didTapSecondPlacePicker()
     func didTapBackButton()
+    func didPickPlaces()
+    func didResetPickerView()
 }
 
 class TwoPlacesPickerView: UIView {
@@ -26,6 +28,9 @@ class TwoPlacesPickerView: UIView {
         button.setBackgroundImage(#imageLiteral(resourceName: "back_icon"), for: UIControlState.normal)
         return button
     }()
+    
+    private var _setFirstPlace: Bool = false
+    private var _setSecondPlace: Bool = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -95,6 +100,35 @@ class TwoPlacesPickerView: UIView {
     
     @objc private func backButtonTapped() {
         delegate?.didTapBackButton()
+    }
+    
+    func setFirstPlacePicker(_ string: String) {
+        self.firstPlacePicker.setTitle(string, for: UIControlState.normal)
+        self._setFirstPlace = true
+        
+        if self._setSecondPlace {
+            delegate?.didPickPlaces()
+        }
+    }
+    
+    func setSecondPlacePicker(_ string: String) {
+        self.secondPlacePicker.setTitle(string, for: UIControlState.normal)
+        self._setSecondPlace = true
+        
+        if self._setFirstPlace {
+            delegate?.didPickPlaces()
+        }
+    }
+    
+    func resetTwoPlacesPickerView() {
+        if self._setFirstPlace && self._setSecondPlace {
+            self.firstPlacePicker.setTitle("Choose starting point...", for: UIControlState.normal)
+            self.secondPlacePicker.setTitle("Choose destination...", for: UIControlState.normal)
+            self._setFirstPlace = false
+            self._setSecondPlace = false
+            
+            delegate?.didResetPickerView()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
