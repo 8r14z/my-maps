@@ -16,19 +16,21 @@ class MapViewController: BaseMapViewController {
     // MARK: Properties
     fileprivate var _locationManager = CLLocationManager()
     fileprivate var _currentLocation: CLLocation?
-    fileprivate let DEFAULT_ZOOM_LEVEL: Float = 15.0
     
     fileprivate var _mapView: GMSMapView!
     fileprivate var _placeDetailView: PlaceDetailView!
     fileprivate var _twoPlacesPickerView: TwoPlacesPickerView!
     fileprivate var _onePlacePickerView: OnePlacePickerView!
-    
+    fileprivate var _pickerViewType: PickerViewType = .onePlace
+
     internal var _autocompleteController: GMSAutocompleteViewController = {
         let autocompleteController = GMSAutocompleteViewController()
         autocompleteController.view.backgroundColor = .red
         autocompleteController.tableCellBackgroundColor = .clear
         return autocompleteController
     }()
+    
+    fileprivate var isSearching: Bool = false
     
     // MARK: Implementation
     override func viewDidLoad() {
@@ -39,12 +41,16 @@ class MapViewController: BaseMapViewController {
     override func setupViews() {
         super.setupViews()
         
+        // Setup main view
         let placeDetailYPosition = self.view.bounds.height - DEFAULT_PLACE_DETAIL_VIEW_HEIGHT
-        self._placeDetailView = PlaceDetailView(frame: CGRect(x: 0,
-                                                              y: placeDetailYPosition,
-                                                              width: self.view.bounds.width,
-                                                              height: DEFAULT_PLACE_DETAIL_VIEW_HEIGHT))
-        self._placeDetailView.backgroundColor = UIColor(white: 1.0, alpha: 0.8)
+        let placeDetailViewRect = CGRect(
+            x: 0,
+            y: placeDetailYPosition,
+            width: self.view.bounds.width,
+            height: DEFAULT_PLACE_DETAIL_VIEW_HEIGHT
+        )
+        self._placeDetailView = PlaceDetailView(frame: placeDetailViewRect)
+        self._placeDetailView.backgroundColor = UIColor.white
         self._placeDetailView.isHidden = true
         
         self._mapView = GMSMapView(frame: self.view.bounds)
@@ -57,15 +63,28 @@ class MapViewController: BaseMapViewController {
         self.contentMainView.addSubview(self._mapView)
         self.contentMainView.addSubview(self._placeDetailView)
         
+        // Setup header view
         self._twoPlacesPickerView = TwoPlacesPickerView(frame: self.headerDirectionView.bounds)
         self._twoPlacesPickerView.delegate = self
         
-        self._onePlacePickerView = OnePlacePickerView(frame: self.headerDirectionView.bounds)
-        self._onePlacePickerView.backgroundColor = UIColor.white
+        let onePlacePickerViewRect = CGRect(
+            x: 0,
+            y: 0,
+            width: self.headerDirectionView.bounds.width,
+            height: self.headerDirectionView.bounds.height/3
+        )
+        self._onePlacePickerView = OnePlacePickerView(frame: onePlacePickerViewRect)
         self._onePlacePickerView.delegate = self
         
         self.headerDirectionView.addSubview(self._twoPlacesPickerView)
         self.headerDirectionView.addSubview(self._onePlacePickerView)
+
+        if self._pickerViewType == .onePlace {
+            self._twoPlacesPickerView.isHidden = true
+        }
+        else {
+            self._onePlacePickerView.isHidden = true
+        }
 
         self.headerDirectionView.backgroundColor = UIColor.clear
     }
@@ -84,12 +103,17 @@ class MapViewController: BaseMapViewController {
     }
     
     // MARK: Animate show/hide UI elements
-    internal func hideTwoPlacesPickerView(_ hide: Bool, animated: Bool) {
+    func hideTwoPlacesPickerView(_ hide: Bool, animated: Bool) {
+        self._twoPlacesPickerView.isHidden = !self._twoPlacesPickerView.isHidden
+        self._onePlacePickerView.isHidden = !self._onePlacePickerView.isHidden
+        
         var originX: CGFloat = 0
         let moveDistance = self.headerDirectionView.bounds.width
         
         if hide {
+            self._pickerViewType = .onePlace
             originX = self._twoPlacesPickerView.frame.origin.x
+            
             if animated {
                 self._onePlacePickerView.frame.origin.x -= moveDistance
                 UIView.animate(withDuration: 0.3) { [weak self] in
@@ -101,9 +125,15 @@ class MapViewController: BaseMapViewController {
                 self._onePlacePickerView.frame.origin.x -= originX
                 self._twoPlacesPickerView.frame.origin.x += moveDistance
             }
+            
+            if isSearching {
+                hidePlaceDetail(false, animated: true)
+            }
         }
         else {
+            self._pickerViewType = .twoPlace
             originX = self._onePlacePickerView.frame.origin.x
+            
             if animated {
                 self._twoPlacesPickerView.frame.origin.x += moveDistance
                 UIView.animate(withDuration: 0.3) { [weak self] in
@@ -115,28 +145,33 @@ class MapViewController: BaseMapViewController {
                 self._onePlacePickerView.frame.origin.x -= moveDistance
                 self._twoPlacesPickerView.frame.origin.x = originX
             }
+            
+            hidePlaceDetail(true, animated: true)
         }
     }
     
-    private func hidePlaceDetail(_ hide: Bool, animated: Bool) {
-        if animated {
-            UIView.transition(with: headerDirectionView, duration: 0.5, options: .transitionCrossDissolve, animations: { [weak self] in
-                self?._placeDetailView.isHidden = hide
-                if hide {
-                    self?._mapView.padding.bottom = 0
-                } else {
-                    self?._mapView.padding.bottom = DEFAULT_PLACE_DETAIL_VIEW_HEIGHT
-                }
-            })
-        }
-        else {
-            self._placeDetailView.isHidden = hide
+    func hidePlaceDetail(_ hide: Bool, animated: Bool) {
+        
+        let paddingMapView = {
             if hide {
                 self._mapView.padding.bottom = 0
             } else {
                 self._mapView.padding.bottom = DEFAULT_PLACE_DETAIL_VIEW_HEIGHT
             }
         }
+        
+        if animated {
+            UIView.transition(with: headerDirectionView, duration: 0.5, options: .transitionCrossDissolve, animations: { [weak self] in
+                self?._placeDetailView.isHidden = hide
+            }) { (completion) in
+                paddingMapView()
+            }
+        }
+        else {
+            self._placeDetailView.isHidden = hide
+            paddingMapView()
+        }
+        
     }
 
 }
@@ -149,7 +184,7 @@ extension MapViewController: CLLocationManagerDelegate {
 
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
                                               longitude: location.coordinate.longitude,
-                                              zoom: DEFAULT_ZOOM_LEVEL)
+                                              zoom: DEFAULT_MAP_ZOOM_LEVEL)
 
         self._mapView.isHidden = false
         self._mapView.animate(to: camera)
@@ -176,6 +211,78 @@ extension MapViewController: CLLocationManagerDelegate {
             print("[Location Authorization] Location status is authorized.")
             self._locationManager.startUpdatingLocation()
         }
+    }
+    
+}
+
+// MARK: GoogleMapView Delegate
+extension MapViewController: GMSMapViewDelegate {
+    func mapView(_ mapView: GMSMapView, didTapPOIWithPlaceID placeID: String, name: String, location: CLLocationCoordinate2D) {
+        let infoMarker = GMSMarker()
+        infoMarker.snippet = "(\(location.latitude), \(location.longitude))"
+        infoMarker.position = location
+        infoMarker.title = name
+        infoMarker.opacity = 0;
+        infoMarker.infoWindowAnchor.y = 1
+        infoMarker.map = mapView
+        mapView.selectedMarker = infoMarker
+    }
+}
+
+
+// MARK: GoogleMap AutoCompleteView Delegate
+extension MapViewController: GMSAutocompleteViewControllerDelegate {
+    
+    // Handle the user's selection.
+    func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
+        // One place picker handle
+        if self._pickerViewType == .onePlace {
+            let marker = GMSMarker()
+            marker.position = place.coordinate
+            marker.title = place.name
+            marker.map = self._mapView
+            
+            let camera = GMSCameraPosition.camera(withLatitude: place.coordinate.latitude,
+                                                  longitude: place.coordinate.longitude,
+                                                  zoom: DEFAULT_MAP_ZOOM_LEVEL)
+            self._mapView.animate(to: camera)
+            
+            self.hidePlaceDetail(false, animated: true)
+            
+            if let address = place.formattedAddress {
+                self._placeDetailView.setDetailDescription(address)
+            }
+            else {
+                self._placeDetailView.setDetailDescription(place.name)
+            }
+            
+            self._onePlacePickerView.setPlacePicker(place.name)
+            
+            self.isSearching = true
+        }
+        else { // Two places picker handle
+            
+            
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
+        UtilityHelper.presentAlert("Error", message: error.localizedDescription, vc: self)
+    }
+    
+    func wasCancelled(_ viewController: GMSAutocompleteViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // Turn the network activity indicator on and off again.
+    func didRequestAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
     
 }

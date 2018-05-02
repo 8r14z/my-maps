@@ -9,6 +9,10 @@
 import Foundation
 
 extension MapViewController: OnePlacePickerViewDelegate {
+    func didTapPlacePicker() {
+        present(self._autocompleteController, animated: true, completion: nil)
+    }
+    
     func didTapChangePickerView() {
         hideTwoPlacesPickerView(false, animated: true)
     }

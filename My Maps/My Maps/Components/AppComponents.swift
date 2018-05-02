@@ -10,6 +10,11 @@ import Foundation
 import GoogleMaps
 import GooglePlaces
 
+enum PickerViewType {
+    case onePlace
+    case twoPlace
+}
+
 class AppComponents {
     static let sharedInstanced = AppComponents()
     

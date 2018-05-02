@@ -28,9 +28,12 @@ class PlaceDetailView: UIView {
         self._detailDescriptionLabel.textAlignment = NSTextAlignment.center
         self._detailDescriptionLabel.text = "Default text daskdhasudhashjkkasdkasjdjsakkdhda sdsadas sad as"
         
-        self._directionButton.frame = CGRect(x: 0, y: bounds.height/2, width: bounds.width, height: bounds.height/2)
+        self._directionButton.frame = CGRect(x: bounds.width/2 - bounds.width/4, y: bounds.height/2, width: bounds.width/2, height: bounds.height/2 - DEFAULT_PADDING)
         self._directionButton.setTitle("Direction", for: UIControlState.normal)
+        self._directionButton.setTitleColor(UIColor.white, for: UIControlState.normal)
         self._directionButton.addTarget(self, action: #selector(tapDirection), for: UIControlEvents.touchUpInside)
+        self._directionButton.backgroundColor = DEFAULT_PLACE_PICKER_VIEW_BACKGROUND_COLOR
+        self._directionButton.layer.cornerRadius = DEFAULT_CORNER_RADIUS_VALUE
         
         addSubview(self._detailDescriptionLabel)
         addSubview(self._directionButton)
@@ -44,7 +47,7 @@ class PlaceDetailView: UIView {
         self._directionButton.setTitle(string, for: UIControlState.normal)
     }
     
-    @objc func tapDirection() {
+    @objc private func tapDirection() {
         delegate?.didTapDirectionButton()
     }
     

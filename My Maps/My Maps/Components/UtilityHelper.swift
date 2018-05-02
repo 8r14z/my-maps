@@ -26,6 +26,15 @@ struct UtilityHelper {
         vc.present(alert, animated: true, completion: nil)
     }
     
+    static func presentAlert(_ title: String, message: String, vc: UIViewController) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(cancelAction)
+        vc.present(alert, animated: true, completion: nil)
+    }
+    
     static func blurView(_ rect: CGRect, style: UIBlurEffectStyle = .extraLight) -> UIVisualEffectView {
         let blurEffect = UIBlurEffect(style: style)
         let blurView = UIVisualEffectView(effect: blurEffect)

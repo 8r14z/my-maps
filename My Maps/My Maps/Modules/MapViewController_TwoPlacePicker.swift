@@ -10,11 +10,11 @@ import UIKit
 
 // MARK: TwoPlacesPickerView Delegate
 extension MapViewController: TwoPlacesPickerViewDelegate {
-    func didTapFirstPlaceChooser() {
+    func didTapFirstPlacePicker() {
         present(self._autocompleteController, animated: true, completion: nil)
     }
     
-    func didTapSecondPlaceChooser() {
+    func didTapSecondPlacePicker() {
         present(self._autocompleteController, animated: true, completion: nil)
     }
     
