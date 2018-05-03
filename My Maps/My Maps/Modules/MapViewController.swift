@@ -10,21 +10,24 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
+import Alamofire
+import SwiftyJSON
 
 class MapViewController: BaseMapViewController {
     
     // MARK: Properties
     fileprivate var _locationManager = CLLocationManager()
-    fileprivate var _currentLocation: CLLocation?
+    fileprivate var _myLocation: CLLocationCoordinate2D?
+    fileprivate var _firstLocation: CLLocationCoordinate2D?
+    fileprivate var _secondLocation: CLLocationCoordinate2D?
     
     fileprivate var _mapView: GMSMapView!
     fileprivate var _placeDetailView: PlaceDetailView!
     fileprivate var _twoPlacesPickerView: TwoPlacesPickerView!
     fileprivate var _onePlacePickerView: OnePlacePickerView!
     fileprivate var _pickerViewType: PickerViewType = .onePlace
+    fileprivate var _destinationPlace: GMSPlace?
     
-    fileprivate var _firstLocation: CLLocationCoordinate2D?
-    fileprivate var _secondLocation: CLLocationCoordinate2D?
     fileprivate var _isSearching: Bool = false
     fileprivate var _pickingSecondPlace = false
     
@@ -48,6 +51,7 @@ class MapViewController: BaseMapViewController {
         self._placeDetailView = PlaceDetailView(frame: placeDetailViewRect)
         self._placeDetailView.backgroundColor = UIColor.white
         self._placeDetailView.isHidden = true
+        self._placeDetailView.delegate = self
         
         self._mapView = GMSMapView(frame: self.view.bounds)
         self._mapView.settings.myLocationButton = true
@@ -202,7 +206,7 @@ extension MapViewController: CLLocationManagerDelegate {
 
         self._mapView.isHidden = false
         self._mapView.animate(to: camera)
-        self._currentLocation = location
+        self._myLocation = location.coordinate
     }
     
     // Handle location manager errors.
@@ -274,7 +278,7 @@ extension MapViewController: GMSAutocompleteViewControllerDelegate {
             
             self._onePlacePickerView.setPlacePicker(place.name)
             
-            self._secondLocation = place.coordinate
+            self._destinationPlace = place
             
             self._isSearching = true
         }
@@ -297,6 +301,16 @@ extension MapViewController: GMSAutocompleteViewControllerDelegate {
     }
     
     func wasCancelled(_ viewController: GMSAutocompleteViewController) {
+        if !self._pickingSecondPlace {
+            //self._firstLocation = place.coordinate
+            self._firstLocation = CLLocationCoordinate2D(latitude: 10.800678, longitude: 106.676714)
+            self._twoPlacesPickerView.setFirstPlacePicker("FIRST PLACE")
+        }
+        else {
+            //self._secondLocation = place.coordinate
+            self._secondLocation = CLLocationCoordinate2D(latitude: 10.760418, longitude: 106.699297)
+            self._twoPlacesPickerView.setSecondPlacePicker("SECOND PLACE")
+        }
         dismiss(animated: true, completion: nil)
     }
     
@@ -341,8 +355,13 @@ extension MapViewController: TwoPlacesPickerViewDelegate {
     }
     
     func didPickPlaces() {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-            guard let firstLocation = self._firstLocation, let secondLocation = self._secondLocation else { return }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { [weak self] in
+            guard let `self` = self else { return }
+            guard let firstLocation =  self._firstLocation ?? self._myLocation,
+                let secondLocation = self._secondLocation ?? self._destinationPlace?.coordinate
+                else { return }
+            
+            self._mapView.clear()
             
             var bounds = GMSCoordinateBounds()
             let firstMarker = GMSMarker()
@@ -360,12 +379,66 @@ extension MapViewController: TwoPlacesPickerViewDelegate {
             CATransaction.setValue(1, forKey: kCATransactionAnimationDuration)
             self._mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 100))
             CATransaction.commit()
+            
+            let path = GMSMutablePath()
+            path.add(firstLocation)
+            path.add(secondLocation)
+            
+            self.getPolylineRoute(from: firstLocation, to: secondLocation)
         }
     }
     
     func didResetPickerView() {
         self._mapView.clear()
+        if let destination = self._destinationPlace {
+            let marker = GMSMarker()
+            marker.position = destination.coordinate
+            marker.title = destination.name
+            marker.map = self._mapView
+        }
+    }
+    
+    func getPolylineRoute(from source: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D){
+        
+        let origin = "\(source.latitude),\(source.longitude)"
+        let destination = "\(destination.latitude),\(destination.longitude)"
+                
+        let url = "https://maps.googleapis.com/maps/api/directions/json?origin=\(origin)&destination=\(destination)&mode=driving&key=\(kGoogleSDKAPIKey)"
+
+        Alamofire.request(url).responseJSON { response in
+            let tryJSON: JSON?
+            do {
+                tryJSON = try JSON(data: response.data!)
+            }
+            catch {
+                tryJSON = nil
+            }
+            
+            guard let json = tryJSON else { return }
+            let routes = json["routes"].arrayValue
+
+            for route in routes
+            {
+                let routeOverviewPolyline = route["overview_polyline"].dictionary
+                let points = routeOverviewPolyline?["points"]?.stringValue
+                let path = GMSPath.init(fromEncodedPath: points!)
+                let polyline = GMSPolyline.init(path: path)
+                polyline.map = self._mapView
+            }
+        }
     }
 }
 
+// MARK: PlaceDetailView Delegate
+extension MapViewController: PlaceDetailViewDelegate {
+    func didTapDirectionButton() {
+        self._twoPlacesPickerView.setFirstPlacePicker("My location")
+        if let destination = self._destinationPlace {
+            self._twoPlacesPickerView.setSecondPlacePicker(destination.name)
+        }
+        
+        hideTwoPlacesPickerView(false, animated: true)
+    }
+    
+}
 
