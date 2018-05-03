@@ -31,10 +31,22 @@ class MapViewController: BaseMapViewController {
     fileprivate var _isSearching: Bool = false
     fileprivate var _pickingSecondPlace = false
     
+    fileprivate var _timer: Timer? {
+        willSet {
+            _timer?.invalidate()
+        }
+    }
+    
     // MARK: Implementation
     override func viewDidLoad() {
         super.viewDidLoad()
         
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        self._timer?.invalidate()
     }
     
     override func setupViews() {
@@ -102,15 +114,14 @@ class MapViewController: BaseMapViewController {
     
     // MARK: Animate show/hide UI elements
     func hideTwoPlacesPickerView(_ hide: Bool, animated: Bool) {
-        self._twoPlacesPickerView.isHidden = !self._twoPlacesPickerView.isHidden
-        self._onePlacePickerView.isHidden = !self._onePlacePickerView.isHidden
-        
         var originX: CGFloat = 0
         let moveDistance = self.headerDirectionView.bounds.width
         
         if hide {
             self._pickerViewType = .onePlace
             originX = self._twoPlacesPickerView.frame.origin.x
+
+            if originX < 0 || originX > moveDistance { return }
             
             if animated {
                 self._onePlacePickerView.frame.origin.x -= moveDistance
@@ -127,10 +138,15 @@ class MapViewController: BaseMapViewController {
             if self._isSearching {
                 hidePlaceDetail(false, animated: true)
             }
+            else {
+                hidePlaceDetail(true, animated: true)
+            }
         }
         else {
             self._pickerViewType = .twoPlace
             originX = self._onePlacePickerView.frame.origin.x
+            
+            if originX < 0 || originX > moveDistance { return }
             
             if animated {
                 self._twoPlacesPickerView.frame.origin.x += moveDistance
@@ -146,6 +162,9 @@ class MapViewController: BaseMapViewController {
             
             hidePlaceDetail(true, animated: true)
         }
+        
+        self._twoPlacesPickerView.isHidden = !self._twoPlacesPickerView.isHidden
+        self._onePlacePickerView.isHidden = !self._onePlacePickerView.isHidden
     }
     
     func hidePlaceDetail(_ hide: Bool, animated: Bool) {
@@ -192,6 +211,11 @@ class MapViewController: BaseMapViewController {
         
         present(autocompleteController, animated: true, completion: nil)
     }
+    
+    fileprivate func resetViews() {
+        self._mapView.clear()
+        self._timer?.invalidate()
+    }
 }
 
 // MARK: CoreLocationManager Delegate
@@ -212,6 +236,7 @@ extension MapViewController: CLLocationManagerDelegate {
     // Handle location manager errors.
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         self._locationManager.stopUpdatingLocation()
+        UtilityHelper.presentAlert("Error", message: error.localizedDescription, vc: self)
     }
     
     // Handle authorization for the location manager.
@@ -297,20 +322,20 @@ extension MapViewController: GMSAutocompleteViewControllerDelegate {
     }
     
     func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
-        UtilityHelper.presentAlert("Error", message: error.localizedDescription, vc: self)
+        dismiss(animated: true) { [weak self] in
+            guard let `self` = self else { return }
+            UtilityHelper.presentAlert("Error", message: error.localizedDescription, vc: self)
+            
+            self.hideTwoPlacesPickerView(false, animated: true)
+            
+            self._firstLocation = CLLocationCoordinate2D(latitude: 10.800678, longitude: 106.676714)
+            self._twoPlacesPickerView.setFirstPlacePicker("SAMPLE FIRST PLACE")
+            self._secondLocation = CLLocationCoordinate2D(latitude: 10.760418, longitude: 106.699297)
+            self._twoPlacesPickerView.setSecondPlacePicker("SAMPLE SECOND PLACE")
+        }
     }
     
     func wasCancelled(_ viewController: GMSAutocompleteViewController) {
-        if !self._pickingSecondPlace {
-            //self._firstLocation = place.coordinate
-            self._firstLocation = CLLocationCoordinate2D(latitude: 10.800678, longitude: 106.676714)
-            self._twoPlacesPickerView.setFirstPlacePicker("FIRST PLACE")
-        }
-        else {
-            //self._secondLocation = place.coordinate
-            self._secondLocation = CLLocationCoordinate2D(latitude: 10.760418, longitude: 106.699297)
-            self._twoPlacesPickerView.setSecondPlacePicker("SECOND PLACE")
-        }
         dismiss(animated: true, completion: nil)
     }
     
@@ -384,12 +409,12 @@ extension MapViewController: TwoPlacesPickerViewDelegate {
             path.add(firstLocation)
             path.add(secondLocation)
             
-            self.getPolylineRoute(from: firstLocation, to: secondLocation)
+            self.drawRoute(from: firstLocation, to: secondLocation)
         }
     }
     
     func didResetPickerView() {
-        self._mapView.clear()
+        resetViews()
         if let destination = self._destinationPlace {
             let marker = GMSMarker()
             marker.position = destination.coordinate
@@ -398,12 +423,8 @@ extension MapViewController: TwoPlacesPickerViewDelegate {
         }
     }
     
-    func getPolylineRoute(from source: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D){
-        
-        let origin = "\(source.latitude),\(source.longitude)"
-        let destination = "\(destination.latitude),\(destination.longitude)"
-                
-        let url = "https://maps.googleapis.com/maps/api/directions/json?origin=\(origin)&destination=\(destination)&mode=driving&key=\(kGoogleSDKAPIKey)"
+    private func drawRoute(from source: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D){
+        let url = UtilityHelper.googleDirectionURL(startingPoint: source, destination: destination)
 
         Alamofire.request(url).responseJSON { response in
             let tryJSON: JSON?
@@ -416,14 +437,36 @@ extension MapViewController: TwoPlacesPickerViewDelegate {
             
             guard let json = tryJSON else { return }
             let routes = json["routes"].arrayValue
-
+            
             for route in routes
             {
                 let routeOverviewPolyline = route["overview_polyline"].dictionary
                 let points = routeOverviewPolyline?["points"]?.stringValue
-                let path = GMSPath.init(fromEncodedPath: points!)
-                let polyline = GMSPolyline.init(path: path)
+                let path = GMSPath(fromEncodedPath: points!)
+                let polyline = GMSPolyline(path: path)
+                polyline.strokeWidth = DEFAULT_MAP_DIRECTION_STROKE_WIDTH
+                polyline.strokeColor = UIColor.lightGray
                 polyline.map = self._mapView
+                
+                var animatePath = GMSMutablePath()
+                let animatePolyline = GMSPolyline()
+                var i: UInt = 0
+                self._timer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true, block: { (timer) in
+                    guard let path = path else { return }
+                    if (i < path.count()) {
+                        animatePath.add(path.coordinate(at: i))
+                        animatePolyline.path = animatePath
+                        animatePolyline.strokeColor = UIColor.red
+                        animatePolyline.strokeWidth = DEFAULT_MAP_DIRECTION_STROKE_WIDTH
+                        animatePolyline.map = self._mapView
+                        i += 1
+                    }
+                    else {
+                        i = 0
+                        animatePath = GMSMutablePath()
+                        animatePolyline.map = nil
+                    }
+                })
             }
         }
     }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 struct UtilityHelper {
     static func presentOpenSettingsAlert(_ vc: UIViewController) {
@@ -41,5 +42,12 @@ struct UtilityHelper {
         blurView.translatesAutoresizingMaskIntoConstraints = false
         blurView.frame = rect
         return blurView
+    }
+    
+    static func googleDirectionURL(startingPoint: CLLocationCoordinate2D, destination: CLLocationCoordinate2D) -> String {
+        let originStr = "\(startingPoint.latitude),\(startingPoint.longitude)"
+        let destinationStr = "\(destination.latitude),\(destination.longitude)"
+        
+        return "https://maps.googleapis.com/maps/api/directions/json?origin=\(originStr)&destination=\(destinationStr)&mode=driving"
     }
 }
