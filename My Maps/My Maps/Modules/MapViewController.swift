@@ -351,6 +351,11 @@ extension MapViewController: GMSAutocompleteViewControllerDelegate {
 }
 
 extension MapViewController: OnePlacePickerViewDelegate {
+    func didTapCancelButton() {
+        self.hidePlaceDetail(true, animated: true)
+        resetViews()
+    }
+    
     func didTapPlacePicker() {
         presentAutoCompleteController()
     }
@@ -376,7 +381,6 @@ extension MapViewController: TwoPlacesPickerViewDelegate {
     
     func didTapBackButton() {
         hideTwoPlacesPickerView(true, animated: true)
-        self._twoPlacesPickerView.resetTwoPlacesPickerView()
     }
     
     func didPickPlaces() {

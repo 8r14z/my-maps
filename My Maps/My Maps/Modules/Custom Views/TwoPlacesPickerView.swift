@@ -99,6 +99,8 @@ class TwoPlacesPickerView: UIView {
     }
     
     @objc private func backButtonTapped() {
+        resetTwoPlacesPickerView()
+        
         delegate?.didTapBackButton()
     }
     
